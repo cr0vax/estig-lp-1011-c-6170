@@ -2693,7 +2693,7 @@ static swig_module_info swig_module = {swig_types, 1, 0, 0, 0, 0};
 
 
 #include <Python.h>
-extern PyObject*  tnt_per_year(int iAno);
+extern PyObject*  count_teachers(int iAno);
 
 
 #include <limits.h>
@@ -2843,7 +2843,7 @@ SWIG_AsVal_int (PyObject * obj, int *val)
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_tnt_per_year(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_count_teachers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -2851,13 +2851,13 @@ SWIGINTERN PyObject *_wrap_tnt_per_year(PyObject *SWIGUNUSEDPARM(self), PyObject
   PyObject * obj0 = 0 ;
   PyObject *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:tnt_per_year",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:count_teachers",&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "tnt_per_year" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "count_teachers" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = (int)(val1);
-  result = (PyObject *)tnt_per_year(arg1);
+  result = (PyObject *)count_teachers(arg1);
   resultobj = result;
   return resultobj;
 fail:
@@ -2867,7 +2867,7 @@ fail:
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"tnt_per_year", _wrap_tnt_per_year, METH_VARARGS, NULL},
+	 { (char *)"count_teachers", _wrap_count_teachers, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 

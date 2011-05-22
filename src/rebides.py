@@ -67,8 +67,8 @@ except AttributeError:
 
 
 
-def tnt_per_year(*args):
-  return _rebides.tnt_per_year(*args)
-tnt_per_year = _rebides.tnt_per_year
+def count_teachers(*args):
+  return _rebides.count_teachers(*args)
+count_teachers = _rebides.count_teachers
 
 

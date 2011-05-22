@@ -4,8 +4,8 @@
 
 %{
 #include <Python.h>
-extern PyObject*  tnt_per_year(int iAno);
+extern PyObject*  count_teachers(int iAno);
 %}
 
 #include <Python.h>
-extern PyObject*  tnt_per_year(int iAno);
+extern PyObject*  count_teachers(int iAno);

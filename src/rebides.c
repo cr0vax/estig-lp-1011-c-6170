@@ -7,9 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h>
+#include <string.h>
 #include <Python.h>
+#include <malloc.h>
 
 #define DB "rebides.db"
+#define MAX_QUERY 200
 
 int contagem;
 	
@@ -21,24 +24,35 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
 }
   
 /*******************************************************
-	function responsable for counting totla number of techers
+
+	Responsable for counting total number of teachers
 	in the higher edutation system per year
 	
-	iAno - year to be counted
+		iAno - year to be counted
 	
-	returns the number of teachers counted
+		returns the number of teachers counted
 
 *******************************************************/
-PyObject* tnt_per_year(int iAno){
-	// builds the query
+PyObject* count_teachers(int iAno){
 	sqlite3 *db;  
 	char *zErrMsg = 0;
 	int rc;
+
+	// declare local variables and allocate memory to them
+	char* cQuery;
+	char* cAno;
 	
-	char* cQuery = "SELECT COUNT(*) FROM docentes WHERE ano =";
-	//strcat(cQuery, (char*) itoa(iAno, cQuery, 10 ));
+	cQuery = (char *) malloc(MAX_QUERY);
+	cAno = (char *) malloc(sizeof(char));
 	
-	printf("Query:%s\n", cQuery);
+	// builds the query
+	strcpy(cQuery, "SELECT COUNT(DISTINCT id_docente) FROM fichas_docencia WHERE ano=");
+	sprintf(cAno, "%d", iAno);			// converts year to string
+	strcat(cQuery, cAno);	    // concatenate year to string
+
+	// print the query for debugging purposes
+	printf("Ano       :%s\n", cAno);
+	printf("Query     :%s\n", cQuery);
 
 	// opens the database
 	rc = sqlite3_open(DB, &db);
@@ -49,7 +63,13 @@ PyObject* tnt_per_year(int iAno){
 		fprintf(stderr, "SQL error: %s\n", zErrMsg);
 		sqlite3_free(zErrMsg);
 	}
+	
+	// closes the database
 	sqlite3_close(db);
+	
+	// free memory
+	free(cQuery);
+	free(cAno);
 	
 	// returns the total teachers found in the query
 	return PyInt_FromLong(contagem);
