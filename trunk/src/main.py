@@ -7,6 +7,11 @@
 import rebides
 
 
+#////////////////////////////////////////////
+# STATISTICS
+#////////////////////////////////////////////
+
+
 #--------------------------------------------
 # total number of teachers in the higher education system per year
 #
@@ -41,9 +46,36 @@ for year in range(10):
 #
 #	year - year used to count the teachers
 #--------------------------------------------
-
+'''
 for year in range(10):
 	print year, rebides.count_teachers_per_degree_establishment(year)
+'''
+
+
+#////////////////////////////////////////////
+# LISTS
+#////////////////////////////////////////////
+
+
+#--------------------------------------------
+# list of establishments per year
+#
+#	year - year used to be listed
+#--------------------------------------------
+'''
+for year in range(10):
+	print year, rebides.list_establishments_per_year(year)
+'''
+
+#--------------------------------------------
+# list of holders of a degree per year
+#
+#	year - year used to be listed
+#--------------------------------------------
+
+for year in range(10):
+	print year, rebides.list_teachers_per_degree_year(year)
 	
 	
 	
+

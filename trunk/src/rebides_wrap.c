@@ -2698,6 +2698,9 @@ extern PyObject* count_teachers_per_establishment(int iYear);
 extern PyObject* count_teachers_per_degree(int iYear);
 extern PyObject* count_teachers_per_degree_establishment(int iYear);
 
+extern PyObject* list_establishments_per_year(int iYear);
+extern PyObject* list_teachers_per_degree_year(int iYear);
+
 
 #include <limits.h>
 #if !defined(SWIG_NO_LLONG_MAX)
@@ -2934,12 +2937,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_list_establishments_per_year(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:list_establishments_per_year",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "list_establishments_per_year" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (PyObject *)list_establishments_per_year(arg1);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_list_teachers_per_degree_year(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:list_teachers_per_degree_year",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "list_teachers_per_degree_year" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (PyObject *)list_teachers_per_degree_year(arg1);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"count_teachers", _wrap_count_teachers, METH_VARARGS, NULL},
 	 { (char *)"count_teachers_per_establishment", _wrap_count_teachers_per_establishment, METH_VARARGS, NULL},
 	 { (char *)"count_teachers_per_degree", _wrap_count_teachers_per_degree, METH_VARARGS, NULL},
 	 { (char *)"count_teachers_per_degree_establishment", _wrap_count_teachers_per_degree_establishment, METH_VARARGS, NULL},
+	 { (char *)"list_establishments_per_year", _wrap_list_establishments_per_year, METH_VARARGS, NULL},
+	 { (char *)"list_teachers_per_degree_year", _wrap_list_teachers_per_degree_year, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
