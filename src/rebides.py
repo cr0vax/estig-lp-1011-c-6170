@@ -71,4 +71,16 @@ def count_teachers(*args):
   return _rebides.count_teachers(*args)
 count_teachers = _rebides.count_teachers
 
+def count_teachers_per_establishment(*args):
+  return _rebides.count_teachers_per_establishment(*args)
+count_teachers_per_establishment = _rebides.count_teachers_per_establishment
+
+def count_teachers_per_degree(*args):
+  return _rebides.count_teachers_per_degree(*args)
+count_teachers_per_degree = _rebides.count_teachers_per_degree
+
+def count_teachers_per_degree_establishment(*args):
+  return _rebides.count_teachers_per_degree_establishment(*args)
+count_teachers_per_degree_establishment = _rebides.count_teachers_per_degree_establishment
+
 
