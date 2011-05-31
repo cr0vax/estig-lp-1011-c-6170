@@ -2693,7 +2693,10 @@ static swig_module_info swig_module = {swig_types, 1, 0, 0, 0, 0};
 
 
 #include <Python.h>
-extern PyObject*  count_teachers(int iAno);
+extern PyObject* count_teachers(int iYear);
+extern PyObject* count_teachers_per_establishment(int iYear);
+extern PyObject* count_teachers_per_degree(int iYear);
+extern PyObject* count_teachers_per_degree_establishment(int iYear);
 
 
 #include <limits.h>
@@ -2865,9 +2868,78 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_count_teachers_per_establishment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:count_teachers_per_establishment",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "count_teachers_per_establishment" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (PyObject *)count_teachers_per_establishment(arg1);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_count_teachers_per_degree(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:count_teachers_per_degree",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "count_teachers_per_degree" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (PyObject *)count_teachers_per_degree(arg1);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_count_teachers_per_degree_establishment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:count_teachers_per_degree_establishment",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "count_teachers_per_degree_establishment" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (PyObject *)count_teachers_per_degree_establishment(arg1);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"count_teachers", _wrap_count_teachers, METH_VARARGS, NULL},
+	 { (char *)"count_teachers_per_establishment", _wrap_count_teachers_per_establishment, METH_VARARGS, NULL},
+	 { (char *)"count_teachers_per_degree", _wrap_count_teachers_per_degree, METH_VARARGS, NULL},
+	 { (char *)"count_teachers_per_degree_establishment", _wrap_count_teachers_per_degree_establishment, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
