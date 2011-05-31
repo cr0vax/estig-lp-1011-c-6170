@@ -33,14 +33,14 @@ static int counterCallback(void **pCounter, int argc, char **argv, char **azColN
 }
 
 /*******************************************************
-	Callback function that add's a register to a list
+	Callback function that add's a statistics register to a list
 	
 		pList       - return variable
 		argc		- total number of columns in the query
 		argv        - values from the query
 		azColName   - each column name for the query
 *******************************************************/
-static int listCallback(void **pList, int argc, char **argv, char **azColName){
+static int statsListCallback(void **pList, int argc, char **argv, char **azColName){
 	int iError;
 	int i;
 	PyObject* poTuple = PyTuple_New(argc);
@@ -66,6 +66,35 @@ static int listCallback(void **pList, int argc, char **argv, char **azColName){
     }
     
     //(*pList)++;
+	return 0;
+}
+
+/*******************************************************
+	Callback function that add's a register to a list
+	
+		pList       - return variable
+		argc		- total number of columns in the query
+		argv        - values from the query
+		azColName   - each column name for the query
+*******************************************************/
+static int listCallback(void **pList, int argc, char **argv, char **azColName){
+	int iError;
+	int i;
+	PyObject* poTuple = PyTuple_New(argc);
+	
+	for (i = 0; i < argc; i++)
+	{	
+		PyTuple_SetItem(poTuple, i, PyString_FromFormat("%s", argv[i]));
+	}
+	
+	// append the tuple to the list
+	iError = PyList_Append(*pList, poTuple);
+	
+	// check if error ocurred
+    if( iError!=0 ){
+		fprintf(stderr, "listCallback Error: %s\n", argv[0]);
+    }
+    
 	return 0;
 }
 
@@ -131,7 +160,7 @@ PyObject* count_teachers(int iYear){
 	
 		iYear - year to be counted
 	
-		returns the number of teachers counted
+		returns list
 *******************************************************/
 PyObject* count_teachers_per_establishment(int iYear){
 	char* cQuery = (char *) malloc(MAX_QUERY);
@@ -150,7 +179,7 @@ PyObject* count_teachers_per_establishment(int iYear){
     strcat(cQuery, " GROUP BY e.designacao");
 	
 	// run the query against the database
-	queryDataBase(cQuery, listCallback, &poList);
+	queryDataBase(cQuery, statsListCallback, &poList);
 	
 	// free memory previously allocated
 	free(cQuery);
@@ -166,7 +195,7 @@ PyObject* count_teachers_per_establishment(int iYear){
 	
 		iYear - year to be counted
 	
-		returns the number of teachers counted
+		returns list
 *******************************************************/
 PyObject* count_teachers_per_degree(int iYear){
 	char* cQuery = (char *) malloc(MAX_QUERY);
@@ -185,7 +214,7 @@ PyObject* count_teachers_per_degree(int iYear){
     strcat(cQuery, " GROUP BY g.designacao");
 	
 	// run the query against the database
-	queryDataBase(cQuery, listCallback, &poList);
+	queryDataBase(cQuery, statsListCallback, &poList);
 	
 	// free memory previously allocated
 	free(cQuery);
@@ -201,7 +230,7 @@ PyObject* count_teachers_per_degree(int iYear){
 
 		iYear - year to be counted
 	
-		returns the number of teachers counted
+		returns list
 *******************************************************/
 PyObject* count_teachers_per_degree_establishment(int iYear){
 	char* cQuery = (char *) malloc(MAX_QUERY);
@@ -219,6 +248,74 @@ PyObject* count_teachers_per_degree_establishment(int iYear){
     sprintf(cYear, "%d", iYear); // converts year to string
     strcat(cQuery, cYear);       // concatenate year to string
     strcat(cQuery, " GROUP BY e.designacao, g.designacao");
+	
+	// run the query against the database
+	queryDataBase(cQuery, statsListCallback, &poList);
+	
+	// free memory previously allocated
+	free(cQuery);
+	free(cYear);
+	
+	// returns total number of teachers counted for desired year
+	return poList;
+}
+
+/*******************************************************
+	Generate list of establishments per year
+
+		iYear - year to be listed
+	
+		returns list
+*******************************************************/
+PyObject* list_establishments_per_year(int iYear){
+	char* cQuery = (char *) malloc(MAX_QUERY);
+    char* cYear = (char *) malloc(sizeof(char));
+	PyObject* poList  = PyList_New(0);
+	
+	// builds the query
+    strcpy(cQuery, "SELECT e.designacao \
+					FROM fichas_docencia fd \
+					INNER JOIN estabelecimentos e on \
+						fd.id_estabelecimento = e.id_estabelecimento \
+					WHERE fd.ano=");
+    sprintf(cYear, "%d", iYear); // converts year to string
+    strcat(cQuery, cYear);       // concatenate year to string
+    strcat(cQuery, " GROUP BY e.designacao");
+	
+	// run the query against the database
+	queryDataBase(cQuery, listCallback, &poList);
+	
+	// free memory previously allocated
+	free(cQuery);
+	free(cYear);
+	
+	// returns total number of teachers counted for desired year
+	return poList;
+}
+
+/*******************************************************
+	Generate list of holders of a degree per year
+
+		iYear - year to be listed
+	
+		returns list
+*******************************************************/
+PyObject* list_teachers_per_degree_year(int iYear){
+	char* cQuery = (char *) malloc(MAX_QUERY);
+    char* cYear = (char *) malloc(sizeof(char));
+	PyObject* poList  = PyList_New(0);
+	
+	// builds the query
+    strcpy(cQuery, "SELECT g.designacao, d.nome_completo \
+					FROM fichas_docencia fd \
+					INNER JOIN graus g on \
+						fd.id_grau = g.id_grau \
+					INNER JOIN docentes d on \
+						fd.id_docente = d.id_docente \
+					WHERE fd.ano=");
+    sprintf(cYear, "%d", iYear); // converts year to string
+    strcat(cQuery, cYear);       // concatenate year to string
+    strcat(cQuery, " GROUP BY g.designacao");
 	
 	// run the query against the database
 	queryDataBase(cQuery, listCallback, &poList);
