@@ -28,10 +28,12 @@ for year in range(10):
 #
 #	year - year used to count the teachers
 #--------------------------------------------
-
+'''
 for year in range(1):
-	rebides.count_teachers_per_establishment(year)
-
+	x = rebides.count_teachers_per_establishment(year)
+	for linha in x:
+		print linha
+'''
 #--------------------------------------------
 # total number of teachers per degree and per year
 #
@@ -46,10 +48,12 @@ for year in range(10):
 #
 #	year - year used to count the teachers
 #--------------------------------------------
-'''
+
 for year in range(10):
-	print year, rebides.count_teachers_per_degree_establishment(year)
-'''
+	x = rebides.count_teachers_per_degree_establishment(year)
+	for linha in x:
+		print linha
+
 
 
 #////////////////////////////////////////////
