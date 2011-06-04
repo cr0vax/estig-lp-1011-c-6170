@@ -26,10 +26,9 @@ typedef void function();
 		argv        - values from the query
 		azColName   - each column name for the query
 *******************************************************/
-static int counterCallback(void **pCounter, int argc, char **argv, char **azColName){
-	*pCounter = atoi( argv[0] ? argv[0] : "NULL");
-    
-	return 0;
+int counterCallback(void **pCounter, int argc, char **argv, char **azColName){
+
+	*pCounter = atoi( argv[0] );
 }
 
 /*******************************************************
@@ -40,7 +39,7 @@ static int counterCallback(void **pCounter, int argc, char **argv, char **azColN
 		argv        - values from the query
 		azColName   - each column name for the query
 *******************************************************/
-static int statsListCallback(void **pList, int argc, char **argv, char **azColName){
+int statsListCallback(void **pList, int argc, char **argv, char **azColName){
 	int iError;
 	int i;
 	PyObject* poTuple = PyTuple_New(argc);
@@ -62,11 +61,8 @@ static int statsListCallback(void **pList, int argc, char **argv, char **azColNa
 	
 	// check if error ocurred
     if( iError!=0 ){
-		fprintf(stderr, "listCallback Error: %s\n", argv[0]);
+		fprintf(stderr, "statsListCallback Error: %s\n", argv[0]);
     }
-    
-    //(*pList)++;
-	return 0;
 }
 
 /*******************************************************
@@ -77,11 +73,12 @@ static int statsListCallback(void **pList, int argc, char **argv, char **azColNa
 		argv        - values from the query
 		azColName   - each column name for the query
 *******************************************************/
-static int listCallback(void **pList, int argc, char **argv, char **azColName){
+int listCallback(void **pList, int argc, char **argv, char **azColName){
 	int iError;
 	int i;
 	PyObject* poTuple = PyTuple_New(argc);
 	
+	// fill tuple with pulled register
 	for (i = 0; i < argc; i++)
 	{	
 		PyTuple_SetItem(poTuple, i, PyString_FromFormat("%s", argv[i]));
@@ -94,8 +91,56 @@ static int listCallback(void **pList, int argc, char **argv, char **azColName){
     if( iError!=0 ){
 		fprintf(stderr, "listCallback Error: %s\n", argv[0]);
     }
+}
+
+/*******************************************************
+	Compares two Python Objects containing strings
+	
+		p1        - first PyObject to be compared
+		p2        - second PyObject to be compared
+		
+		returns
+			 0   objects are equal
+			 1   p1 is greater then p2
+			-1   p1 is lower then p2
+*******************************************************/
+int poStringCompare(PyObject ** p1, PyObject ** p2)
+{
+	//return strcmp(PyString_FromString(p1), PyString_FromString(p2));
+	//printf("%s\n", PyString_FromString(p1));
+	
+	return strcmp(PyString_FromString(p1), PyString_FromString(p2));
+}
+
+/*******************************************************
+	Sorts data using quicksort algorithm
+	
+		pList     - list to be sorted
+		f		  - comparator function to be used
+*******************************************************/
+void qSortPyList(PyObject *pList, function f )
+{
+    int size = PyList_Size(pList);
+    int i;
     
-	return 0;
+    // create an array of pyobjects with the size of pList
+    PyObject **v = (PyObject *) malloc( sizeof(PyObject *) * size );
+    
+	// fill the array with the list data
+    for(i=0; i < size; i++){
+		v[i] = PyList_GetItem(pList, i);
+    }
+    
+    // sort the converted list
+    qsort(v, size, sizeof(PyObject*), f);
+    
+    // insert sorted items into pylist again
+    for (i=0; i<size; ++i) {
+        PyList_SetItem(pList, i, v[i]);
+    }
+
+    // free memory
+    free(v);
 }
 
 /*******************************************************
@@ -139,7 +184,9 @@ PyObject* count_teachers(int iYear){
     char* cYear = (char *) malloc(sizeof(char));
 	
 	// builds the query
-    strcpy(cQuery, "SELECT COUNT(DISTINCT id_docente) FROM fichas_docencia WHERE ano=");
+    strcpy(cQuery, "SELECT COUNT(DISTINCT id_docente) \
+					FROM fichas_docencia \
+					WHERE ano=");
     sprintf(cYear, "%d", iYear); // converts year to string
     strcat(cQuery, cYear);       // concatenate year to string
 	
@@ -181,6 +228,9 @@ PyObject* count_teachers_per_establishment(int iYear){
 	// run the query against the database
 	queryDataBase(cQuery, statsListCallback, &poList);
 	
+	// sorts the list
+	qSortPyList(poList, poStringCompare);
+	
 	// free memory previously allocated
 	free(cQuery);
 	free(cYear);
@@ -215,6 +265,9 @@ PyObject* count_teachers_per_degree(int iYear){
 	
 	// run the query against the database
 	queryDataBase(cQuery, statsListCallback, &poList);
+	
+	// sorts the list
+	qSortPyList(poList, poStringCompare);
 	
 	// free memory previously allocated
 	free(cQuery);
@@ -252,6 +305,9 @@ PyObject* count_teachers_per_degree_establishment(int iYear){
 	// run the query against the database
 	queryDataBase(cQuery, statsListCallback, &poList);
 	
+	// sorts the list
+	qSortPyList(poList, poStringCompare);
+	
 	// free memory previously allocated
 	free(cQuery);
 	free(cYear);
@@ -284,6 +340,9 @@ PyObject* list_establishments_per_year(int iYear){
 	
 	// run the query against the database
 	queryDataBase(cQuery, listCallback, &poList);
+	
+	// sorts the list
+	qSortPyList(poList, poStringCompare);
 	
 	// free memory previously allocated
 	free(cQuery);
@@ -319,6 +378,9 @@ PyObject* list_teachers_per_degree_year(int iYear){
 	
 	// run the query against the database
 	queryDataBase(cQuery, listCallback, &poList);
+	
+	// sorts the list
+	qSortPyList(poList, poStringCompare);
 	
 	// free memory previously allocated
 	free(cQuery);

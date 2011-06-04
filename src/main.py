@@ -8,7 +8,9 @@ import rebides
 
 
 #////////////////////////////////////////////
+#
 # STATISTICS
+#
 #////////////////////////////////////////////
 
 
@@ -17,21 +19,19 @@ import rebides
 #
 #	year - year used to count the teachers
 #--------------------------------------------
-
 '''
 for year in range(10):
 	print year, rebides.count_teachers(year)
 '''
-
 #--------------------------------------------
 # total number of teachers per establishment and per year
 #
 #	year - year used to count the teachers
 #--------------------------------------------
-'''
-for year in range(10):
-	print year, rebides.count_teachers_per_establishment(year)
-'''
+
+for year in range(1):
+	rebides.count_teachers_per_establishment(year)
+
 #--------------------------------------------
 # total number of teachers per degree and per year
 #
@@ -53,7 +53,9 @@ for year in range(10):
 
 
 #////////////////////////////////////////////
+#
 # LISTS
+#
 #////////////////////////////////////////////
 
 
@@ -72,10 +74,10 @@ for year in range(10):
 #
 #	year - year used to be listed
 #--------------------------------------------
-
+'''
 for year in range(10):
 	print year, rebides.list_teachers_per_degree_year(year)
-	
+'''
 	
 	
 
