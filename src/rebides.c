@@ -81,7 +81,8 @@ int listCallback(void **pList, int argc, char **argv, char **azColName){
 	// fill tuple with pulled register
 	for (i = 0; i < argc; i++)
 	{	
-		PyTuple_SetItem(poTuple, i, PyString_FromFormat("%s", argv[i]));
+		//PyTuple_SetItem(poTuple, i, PyString_FromFormat("%s", argv[i]));
+		PyTuple_SetItem(poTuple, i, PyString_FromString(argv[i]));
 	}
 	
 	// append the tuple to the list
@@ -91,6 +92,27 @@ int listCallback(void **pList, int argc, char **argv, char **azColName){
     if( iError!=0 ){
 		fprintf(stderr, "listCallback Error: %s\n", argv[0]);
     }
+}
+
+/*******************************************************
+	Compares two integer values
+	
+		p1        - first integer value to be compared
+		p2        - second integer value to be compared
+		
+		returns
+			 0   objects are equal
+			 1   p1 is greater then p2
+			-1   p1 is lower then p2
+*******************************************************/
+int intcmp(int p1, int p2)
+{
+	int iResult;
+	iResult = p1 - p2;
+	
+	if (iResult > 0)  { return 1;  }	 // p1 is greater than p2
+	if (iResult < 0)  { return -1; }	 // p2 is greater than p1
+	if (iResult == 0) { return 0;  }	 // p1 and p2 are equal
 }
 
 /*******************************************************
@@ -106,10 +128,68 @@ int listCallback(void **pList, int argc, char **argv, char **azColName){
 *******************************************************/
 int poStringCompare(PyObject ** p1, PyObject ** p2)
 {
-	//return strcmp(PyString_FromString(p1), PyString_FromString(p2));
-	//printf("%s\n", PyString_FromString(p1));
 	
-	return strcmp(PyString_FromString(p1), PyString_FromString(p2));
+	int tuplePos = 0;
+	int tupleSize = PyTuple_Size(*p1);
+	int i = 0;
+	
+	while (tuplePos <= tupleSize && i == 0)
+	{
+		// compare both strings
+		i = strcmp( \
+				PyString_AsString(PyTuple_GetItem(*p1, tuplePos)),\
+				PyString_AsString(PyTuple_GetItem(*p2, tuplePos)));
+				
+		// go to next tuple item
+		tuplePos++;
+	}
+	
+	//return strcmp(PyString_FromString(p1), PyString_FromString(p2));
+	return i;
+}
+
+/*******************************************************
+	Compares two Python Objects containing strings
+	but finalized with integer types
+	
+		p1        - first PyObject to be compared
+		p2        - second PyObject to be compared
+		
+		returns
+			 0   objects are equal
+			 1   p1 is greater then p2
+			-1   p1 is lower then p2
+*******************************************************/
+int poFinalizedIntCompare(PyObject ** p1, PyObject ** p2)
+{
+	
+	int tuplePos = 0;
+	int tupleSize = PyTuple_Size(*p1);
+	int i = 0;
+	
+	while (tuplePos <= tupleSize && i == 0)
+	{
+		if (tuplePos < tupleSize)
+		{
+			// compare both strings
+			i = strcmp( \
+				PyString_AsString(PyTuple_GetItem(*p1, tuplePos)),\
+				PyString_AsString(PyTuple_GetItem(*p2, tuplePos)));
+		}
+		else
+		{
+			// compare integer items
+			i = intcmp( \
+				PyInt_FromLong(PyTuple_GetItem(*p1, tuplePos)),\
+				PyInt_FromLong(PyTuple_GetItem(*p2, tuplePos)));
+
+		}
+				
+		// go to next tuple item
+		tuplePos++;
+	}
+
+	return i;
 }
 
 /*******************************************************
@@ -139,7 +219,7 @@ void qSortPyList(PyObject *pList, function f )
         PyList_SetItem(pList, i, v[i]);
     }
 
-    // free memory
+	// free memory
     free(v);
 }
 
@@ -229,7 +309,7 @@ PyObject* count_teachers_per_establishment(int iYear){
 	queryDataBase(cQuery, statsListCallback, &poList);
 	
 	// sorts the list
-	qSortPyList(poList, poStringCompare);
+	qSortPyList(poList, poFinalizedIntCompare);
 	
 	// free memory previously allocated
 	free(cQuery);
@@ -267,7 +347,7 @@ PyObject* count_teachers_per_degree(int iYear){
 	queryDataBase(cQuery, statsListCallback, &poList);
 	
 	// sorts the list
-	qSortPyList(poList, poStringCompare);
+	qSortPyList(poList, poFinalizedIntCompare);
 	
 	// free memory previously allocated
 	free(cQuery);
@@ -306,7 +386,7 @@ PyObject* count_teachers_per_degree_establishment(int iYear){
 	queryDataBase(cQuery, statsListCallback, &poList);
 	
 	// sorts the list
-	qSortPyList(poList, poStringCompare);
+	qSortPyList(poList, poFinalizedIntCompare);
 	
 	// free memory previously allocated
 	free(cQuery);
