@@ -91,4 +91,32 @@ def list_teachers_per_degree_year(*args):
   return _rebides.list_teachers_per_degree_year(*args)
 list_teachers_per_degree_year = _rebides.list_teachers_per_degree_year
 
+def list_teachers_leaving_institution_year(*args):
+  return _rebides.list_teachers_leaving_institution_year(*args)
+list_teachers_leaving_institution_year = _rebides.list_teachers_leaving_institution_year
+
+def count_teachers_to_file():
+  return _rebides.count_teachers_to_file()
+count_teachers_to_file = _rebides.count_teachers_to_file
+
+def count_teachers_per_establishment_to_file():
+  return _rebides.count_teachers_per_establishment_to_file()
+count_teachers_per_establishment_to_file = _rebides.count_teachers_per_establishment_to_file
+
+def count_teachers_per_degree_to_file():
+  return _rebides.count_teachers_per_degree_to_file()
+count_teachers_per_degree_to_file = _rebides.count_teachers_per_degree_to_file
+
+def count_teachers_per_degree_establishment_to_file():
+  return _rebides.count_teachers_per_degree_establishment_to_file()
+count_teachers_per_degree_establishment_to_file = _rebides.count_teachers_per_degree_establishment_to_file
+
+def list_establishments_per_year_to_file():
+  return _rebides.list_establishments_per_year_to_file()
+list_establishments_per_year_to_file = _rebides.list_establishments_per_year_to_file
+
+def list_teachers_per_degree_year_to_file():
+  return _rebides.list_teachers_per_degree_year_to_file()
+list_teachers_per_degree_year_to_file = _rebides.list_teachers_per_degree_year_to_file
+
 
