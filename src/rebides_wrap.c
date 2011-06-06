@@ -2713,6 +2713,7 @@ extern void list_establishments_per_year_to_file();
 extern void list_teachers_per_degree_year_to_file();
 
 extern void list_teachers_leaving_institution_year_to_file();
+extern void list_new_teachers_institution_year_to_file();
 
 
 #include <limits.h>
@@ -3122,6 +3123,18 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_list_new_teachers_institution_year_to_file(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  
+  if (!PyArg_ParseTuple(args,(char *)":list_new_teachers_institution_year_to_file")) SWIG_fail;
+  list_new_teachers_institution_year_to_file();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"count_teachers", _wrap_count_teachers, METH_VARARGS, NULL},
@@ -3139,6 +3152,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"list_establishments_per_year_to_file", _wrap_list_establishments_per_year_to_file, METH_VARARGS, NULL},
 	 { (char *)"list_teachers_per_degree_year_to_file", _wrap_list_teachers_per_degree_year_to_file, METH_VARARGS, NULL},
 	 { (char *)"list_teachers_leaving_institution_year_to_file", _wrap_list_teachers_leaving_institution_year_to_file, METH_VARARGS, NULL},
+	 { (char *)"list_new_teachers_institution_year_to_file", _wrap_list_new_teachers_institution_year_to_file, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
