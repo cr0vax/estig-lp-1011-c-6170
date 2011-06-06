@@ -117,17 +117,12 @@ for year in range(10):
 #--------------------------------------------
 # Add all previous lists to file
 #--------------------------------------------
-'''
 rebides.count_teachers_to_file()
 rebides.count_teachers_per_establishment_to_file()
 rebides.count_teachers_per_degree_to_file()
 rebides.count_teachers_per_degree_establishment_to_file()
-
 rebides.list_establishments_per_year_to_file()
 rebides.list_teachers_per_degree_year_to_file()
-
 rebides.list_teachers_leaving_institution_year_to_file()
 rebides.list_new_teachers_institution_year_to_file()
-'''
-
 

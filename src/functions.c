@@ -36,39 +36,68 @@ void write_list_to_file(PyObject* pList){
     int size = PyList_Size(pList);
     int i;
     int u;
+    int v;
+    PyObject* oldTuple;
+    PyObject* oldTupleItem;
     PyObject* tuple;
     PyObject* tupleItem;
-    char* string = (char *) malloc(MAX_QUERY);;
+    char* string = (char *) malloc(MAX_QUERY);
+    char* oldString = (char *) malloc(MAX_QUERY);
     char* tupleString = (char *) malloc(MAX_QUERY);
     
 	// fill the array with the list data
     for(i=0; i < size; i++){
 		tuple = PyList_GetItem(pList, i);
+		if (i==0) { oldTuple = PyList_GetItem(pList, i); }
 		
 		for(u=0; u < PyTuple_Size(tuple); u++){
 			tupleItem = PyTuple_GetItem(tuple, u);
+			oldTupleItem = PyTuple_GetItem(oldTuple, u);
 			
+			// clear tuple string
+
+			strcpy(tupleString, "");
+
+			// add tuple content
 			if (PyString_CheckExact(tupleItem))
 			{
-				sprintf(string, "%s;", PyString_AsString(tupleItem));
+				sprintf(string, "%s", PyString_AsString(tupleItem));
+				sprintf(oldString, "%s", PyString_AsString(oldTupleItem));
 			}
 			else
 			{
-				sprintf(string, "%d;", PyInt_AsLong(tupleItem));
+				sprintf(string, "%d", PyInt_AsLong(tupleItem));
+				sprintf(oldString, "%d", PyInt_AsLong(oldTupleItem));
 			}
-		
-			strcat(tupleString, string);
+
+			// only write to file if is not equal to previous,
+			// or if it's the first or if it's the last
+			if ( (strcmp(oldString, string) != 0) || \
+				 (i == 0) || \
+				 (u+1==PyTuple_Size(tuple)) ) 
+			{
+				// add tab identation
+				for (v=0; v <= u; v++)
+				{
+					strcat(tupleString, "\t");
+				}
+
+				// concatenate tuple content to identation
+				strcat(tupleString, string);
+			
+				// write to file
+				append_string_to_file(strcat(tupleString, "\n"));
+			
+			}		
 		}
-		
-		// write to file
-		append_string_to_file(strcat(tupleString, "\n"));
-		
-		// clear tuple string
-		strcpy(tupleString, "");
+
+		// save old tuple
+		oldTuple = tuple;
     }
     
     // free memory previously allocated
 	free(string);
+	free(oldString);
 	free(tupleString);
 }
 

@@ -27,7 +27,7 @@ void count_teachers_to_file(){
 	int iCounter;
 	
 	// add header to file
-	strcpy(cHeader, "list of holders of a degree per year");
+	strcpy(cHeader, "total number of teachers in the higher");
 	generate_list_header(cHeader);
 	
 	// add list to file
@@ -37,7 +37,7 @@ void count_teachers_to_file(){
 		generate_year_header(i);
 	
 		// get counter
-		sprintf(cCounter, "%d\n", PyInt_AsLong(count_teachers(i)));
+		sprintf(cCounter, "\t%d\n", PyInt_AsLong(count_teachers(i)));
 		
 		// append counter to list
 		append_string_to_file(cCounter);
