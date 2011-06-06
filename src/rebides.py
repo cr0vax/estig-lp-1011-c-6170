@@ -123,4 +123,8 @@ def list_teachers_per_degree_year_to_file():
   return _rebides.list_teachers_per_degree_year_to_file()
 list_teachers_per_degree_year_to_file = _rebides.list_teachers_per_degree_year_to_file
 
+def list_teachers_leaving_institution_year_to_file():
+  return _rebides.list_teachers_leaving_institution_year_to_file()
+list_teachers_leaving_institution_year_to_file = _rebides.list_teachers_leaving_institution_year_to_file
+
 
