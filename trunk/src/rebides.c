@@ -78,6 +78,10 @@ void write_list_to_file(PyObject* pList){
 		// clear tuple string
 		strcpy(tupleString, "");
     }
+    
+    // free memory previously allocated
+	free(string);
+	free(tupleString);
 }
 
 /*******************************************************
@@ -207,7 +211,6 @@ int poStringCompare(PyObject ** p1, PyObject ** p2)
 		tuplePos++;
 	}
 	
-	//return strcmp(PyString_FromString(p1), PyString_FromString(p2));
 	return i;
 }
 
@@ -516,23 +519,117 @@ PyObject* list_teachers_per_degree_year(int iYear){
 *******************************************************/
 PyObject* list_teachers_leaving_institution_year(int iYear){
 	char* cQuery = (char *) malloc(MAX_QUERY);
-	PyObject* poList  = PyList_New(0);
+	PyObject* poList;
+	PyObject* poFinalList  = PyList_New(0);
 	PyObject* poEstablishmentList  = PyList_New(0);
+	PyObject* poTuple;
 	
 	int iEstablishment;
-	int i;
+	int i, u;
 	sprintf(cQuery, \
 		"SELECT distinct fd.id_estabelecimento \
 			FROM fichas_docencia fd \
 			WHERE fd.ano=%d\
-			ORDER BY ", iYear);
+			ORDER BY fd.id_estabelecimento", iYear);
 
 	// run the query against the database
-	queryDataBase(cQuery, listCallback, &poEstablishmentList);
+	queryDataBase(cQuery, statsListCallback, &poEstablishmentList);
+	
+	
+	printf("size: %d\n", PyList_Size(poEstablishmentList));
 	
 	for (i = 0; i < PyList_Size(poEstablishmentList); i++)
 	{
+		// create new list
+		poList  = PyList_New(0);
+
+		// get next establishment to be checked
+		poTuple = PyList_GetItem(poEstablishmentList, i);
+		iEstablishment = PyInt_AsLong(PyTuple_GetItem(poTuple, 0));
+		
+		// builds the query
+		sprintf(cQuery, \
+			"SELECT distinct e.designacao, d.nome_completo \
+				FROM fichas_docencia fd \
+				INNER JOIN docentes d on \
+					fd.id_docente = d.id_docente \
+				INNER JOIN estabelecimentos e on \
+					fd.id_estabelecimento = e.id_estabelecimento \
+				WHERE \
+					fd.ano=%d and \
+					fd.id_estabelecimento=%d and \
+					d.id_docente not in ( \
+						SELECT d.id_docente \
+							FROM fichas_docencia fd \
+							INNER JOIN docentes d on \
+								fd.id_docente = d.id_docente \
+							WHERE \
+								fd.ano=%d and \
+								fd.id_estabelecimento=%d)", \
+								iYear-1, \
+								iEstablishment, \
+								iYear, \
+								iEstablishment);
+
+		// run the query against the database
+		queryDataBase(cQuery, listCallback, &poList);
+		
+		// append items to final list
+		for (u = 0; u < PyList_Size(poList); u++)
+		{
+			poTuple = PyList_GetItem(poList, u);
+			PyList_Append(poFinalList, poTuple);
+		}
+
+	}
 	
+	// sorts the list
+	qSortPyList(poFinalList, poStringCompare);
+	
+	// free memory previously allocated
+	free(cQuery);
+
+	// returns list of teachers for desired year
+	return poFinalList;
+}
+
+/*******************************************************
+	Generate list of new personnel in the institution per year
+
+		iYear - year to be listed
+	
+		returns list
+*******************************************************/
+PyObject* list_new_teachers_institution_year(int iYear){
+	char* cQuery = (char *) malloc(MAX_QUERY);
+	PyObject* poList;
+	PyObject* poFinalList  = PyList_New(0);
+	PyObject* poEstablishmentList  = PyList_New(0);
+	PyObject* poTuple;
+	
+	int iEstablishment;
+	int i, u;
+	sprintf(cQuery, \
+		"SELECT distinct fd.id_estabelecimento \
+			FROM fichas_docencia fd \
+			WHERE fd.ano=%d\
+			ORDER BY fd.id_estabelecimento", iYear);
+
+	// run the query against the database
+	queryDataBase(cQuery, statsListCallback, &poEstablishmentList);
+	
+	
+	printf("size: %d\n", PyList_Size(poEstablishmentList));
+	
+	for (i = 0; i < PyList_Size(poEstablishmentList); i++)
+	{
+		// create new list
+		poList  = PyList_New(0);
+
+		// get next establishment to be checked
+		poTuple = PyList_GetItem(poEstablishmentList, i);
+		iEstablishment = PyInt_AsLong(PyTuple_GetItem(poTuple, 0));
+		
 		// builds the query
 		sprintf(cQuery, \
 			"SELECT distinct e.designacao, d.nome_completo \
@@ -554,22 +651,39 @@ PyObject* list_teachers_leaving_institution_year(int iYear){
 								fd.id_estabelecimento=%d)", \
 								iYear, \
 								iEstablishment, \
-								iYear+1, \
+								iYear-1, \
 								iEstablishment);
 
 		// run the query against the database
-		queryDataBase(cQuery, counterCallback, &poList);
-	
-		// sorts the list
-		qSortPyList(poList, poStringCompare);
+		queryDataBase(cQuery, listCallback, &poList);
 		
-		// free memory previously allocated
-		free(cQuery);
+		// append items to final list
+		for (u = 0; u < PyList_Size(poList); u++)
+		{
+			poTuple = PyList_GetItem(poList, u);
+			PyList_Append(poFinalList, poTuple);
+		}
 
-		// returns list of teachers for desired year
-		return poList;
 	}
+	
+	// sorts the list
+	qSortPyList(poFinalList, poStringCompare);
+	
+	// free memory previously allocated
+	free(cQuery);
+
+	// returns list of teachers for desired year
+	return poFinalList;
 }
+
+
+
+
+
+
+
+
+
 
 /*******************************************************
 	Generate list header
@@ -589,6 +703,9 @@ void generate_list_header(char * cTitle){
 			 
 	// write header to file
 	append_string_to_file(cHeader);
+	
+	// free memory previously allocated
+	free(cHeader);
 }
 
 /*******************************************************
@@ -604,6 +721,9 @@ void generate_year_header(int iYear){
 			 
 	// write header to file
 	append_string_to_file(cYearHeader);
+	
+	// free memory previously allocated
+	free(cYearHeader);
 }
 
 
@@ -648,6 +768,10 @@ void count_teachers_to_file(){
 		// append counter to list
 		append_string_to_file(cCounter);
 	}
+	
+	// free memory previously allocated
+	free(cCounter);
+	free(cHeader);
 }
 
 /*******************************************************
@@ -675,6 +799,9 @@ void count_teachers_per_establishment_to_file(){
 		// write list to file
 		write_list_to_file(poList);
 	}
+	
+	// free memory previously allocated
+	free(cHeader);
 }
 
 /*******************************************************
@@ -701,6 +828,9 @@ void count_teachers_per_degree_to_file(){
 		// write list to file
 		write_list_to_file(poList);
 	}
+	
+	// free memory previously allocated
+	free(cHeader);
 }
 
 /*******************************************************
@@ -729,6 +859,9 @@ void count_teachers_per_degree_establishment_to_file(){
 		// write list to file
 		write_list_to_file(poList);
 	}
+	
+	// free memory previously allocated
+	free(cHeader);
 }
 
 /*******************************************************
@@ -755,6 +888,9 @@ void list_establishments_per_year_to_file(){
 		// write list to file
 		write_list_to_file(poList);
 	}
+	
+	// free memory previously allocated
+	free(cHeader);
 }
 
 /*******************************************************
@@ -781,4 +917,7 @@ void list_teachers_per_degree_year_to_file(){
 		// write list to file
 		write_list_to_file(poList);
 	}
+	
+	// free memory previously allocated
+	free(cHeader);
 }

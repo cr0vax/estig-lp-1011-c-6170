@@ -13,6 +13,7 @@ extern PyObject* list_establishments_per_year(int iYear);
 extern PyObject* list_teachers_per_degree_year(int iYear);
 
 extern PyObject* list_teachers_leaving_institution_year(int iYear);
+extern PyObject* list_new_teachers_institution_year(int iYear);
 
 extern void count_teachers_to_file();
 extern void count_teachers_per_establishment_to_file();
@@ -33,6 +34,7 @@ extern PyObject* list_establishments_per_year(int iYear);
 extern PyObject* list_teachers_per_degree_year(int iYear);
 
 extern PyObject* list_teachers_leaving_institution_year(int iYear);
+extern PyObject* list_new_teachers_institution_year(int iYear);
 
 extern void count_teachers_to_file();
 extern void count_teachers_per_establishment_to_file();

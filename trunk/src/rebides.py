@@ -95,6 +95,10 @@ def list_teachers_leaving_institution_year(*args):
   return _rebides.list_teachers_leaving_institution_year(*args)
 list_teachers_leaving_institution_year = _rebides.list_teachers_leaving_institution_year
 
+def list_new_teachers_institution_year(*args):
+  return _rebides.list_new_teachers_institution_year(*args)
+list_new_teachers_institution_year = _rebides.list_new_teachers_institution_year
+
 def count_teachers_to_file():
   return _rebides.count_teachers_to_file()
 count_teachers_to_file = _rebides.count_teachers_to_file
