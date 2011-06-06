@@ -4,7 +4,8 @@
 CC = gcc
 CFLAGS = -g -Wall
 OBJECTS = rebides.o\
-rebides_wrap.o
+rebides_wrap.o\
+functions.o
 
 INCFLAGS = -I/usr/include/python2.6
 
@@ -18,6 +19,9 @@ rebides_wrap.c: rebides.i
 	
 rebides_wrap.o: rebides_wrap.c
 	$(CC) -c -o rebides_wrap.o rebides_wrap.c $(INCFLAGS)
+
+functions.o: functions.c
+	$(CC) -c -o functions.o functions.c $(INCFLAGS)
 
 rebides.o: rebides.c
 	$(CC) -c -o rebides.o rebides.c $(INCFLAGS)

@@ -127,4 +127,8 @@ def list_teachers_leaving_institution_year_to_file():
   return _rebides.list_teachers_leaving_institution_year_to_file()
 list_teachers_leaving_institution_year_to_file = _rebides.list_teachers_leaving_institution_year_to_file
 
+def list_new_teachers_institution_year_to_file():
+  return _rebides.list_new_teachers_institution_year_to_file()
+list_new_teachers_institution_year_to_file = _rebides.list_new_teachers_institution_year_to_file
+
 
