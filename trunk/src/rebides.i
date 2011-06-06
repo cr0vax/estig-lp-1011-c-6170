@@ -22,6 +22,8 @@ extern void count_teachers_per_degree_establishment_to_file();
 
 extern void list_establishments_per_year_to_file();
 extern void list_teachers_per_degree_year_to_file();
+
+extern void list_teachers_leaving_institution_year_to_file();
 %}
 
 #include <Python.h>
@@ -43,3 +45,5 @@ extern void count_teachers_per_degree_establishment_to_file();
 
 extern void list_establishments_per_year_to_file();
 extern void list_teachers_per_degree_year_to_file();
+
+extern void list_teachers_leaving_institution_year_to_file();

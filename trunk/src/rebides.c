@@ -921,3 +921,32 @@ void list_teachers_per_degree_year_to_file(){
 	// free memory previously allocated
 	free(cHeader);
 }
+
+/*******************************************************
+	Add list of new personnel in the institution per year to file
+*******************************************************/
+void list_teachers_leaving_institution_year_to_file(){
+	char* cHeader = (char *) malloc(MAX_QUERY);
+	PyObject* poList;
+	int i;
+	
+	// add header to file
+	strcpy(cHeader, "list of new personnel in the institution per year");
+	generate_list_header(cHeader);
+	
+	// add list to file
+	for (i = 0; i < 10; i++)
+	{
+		// add year header
+		generate_year_header(i);
+	
+		// get list
+		poList = list_teachers_leaving_institution_year(i);
+		
+		// write list to file
+		write_list_to_file(poList);
+	}
+	
+	// free memory previously allocated
+	free(cHeader);
+}

@@ -107,12 +107,13 @@ for year in range(1):
 #
 #	year - year used to be listed
 #--------------------------------------------
-#for year in range(1,10):
-for year in range(1,2):
+'''
+for year in range(1,10):
 	print year
 	x = rebides.list_new_teachers_institution_year(year)
 	for linha in x:
 		print year, linha
+'''
 #--------------------------------------------
 # list of personnel leaving the institution per year
 #
@@ -127,3 +128,5 @@ rebides.count_teachers_per_degree_establishment_to_file()
 rebides.list_establishments_per_year_to_file()
 rebides.list_teachers_per_degree_year_to_file()
 '''
+rebides.list_teachers_leaving_institution_year_to_file()
+
