@@ -2702,6 +2702,7 @@ extern PyObject* list_establishments_per_year(int iYear);
 extern PyObject* list_teachers_per_degree_year(int iYear);
 
 extern PyObject* list_teachers_leaving_institution_year(int iYear);
+extern PyObject* list_new_teachers_institution_year(int iYear);
 
 extern void count_teachers_to_file();
 extern void count_teachers_per_establishment_to_file();
@@ -3013,6 +3014,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_list_new_teachers_institution_year(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:list_new_teachers_institution_year",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "list_new_teachers_institution_year" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (PyObject *)list_new_teachers_institution_year(arg1);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_count_teachers_to_file(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   
@@ -3094,6 +3117,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"list_establishments_per_year", _wrap_list_establishments_per_year, METH_VARARGS, NULL},
 	 { (char *)"list_teachers_per_degree_year", _wrap_list_teachers_per_degree_year, METH_VARARGS, NULL},
 	 { (char *)"list_teachers_leaving_institution_year", _wrap_list_teachers_leaving_institution_year, METH_VARARGS, NULL},
+	 { (char *)"list_new_teachers_institution_year", _wrap_list_new_teachers_institution_year, METH_VARARGS, NULL},
 	 { (char *)"count_teachers_to_file", _wrap_count_teachers_to_file, METH_VARARGS, NULL},
 	 { (char *)"count_teachers_per_establishment_to_file", _wrap_count_teachers_per_establishment_to_file, METH_VARARGS, NULL},
 	 { (char *)"count_teachers_per_degree_to_file", _wrap_count_teachers_per_degree_to_file, METH_VARARGS, NULL},
